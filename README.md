@@ -18,6 +18,11 @@
 * **Modern Web UI**: A custom-designed frontend with interactive 3D-style robotic arm animation and user-friendly scan visualization.
 
 
+Deployed on -- https://anshumanprojectpower.streamlit.app/
+you check here live working
+
+
+
 
 ---
 
