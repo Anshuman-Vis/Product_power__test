@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>productPower | AI-Powered Food Label Intelligence</title>
+  <meta name="description" content="Automate food safety auditing, risk assessment, and regulatory compliance with lightning-fast AI extraction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="glow-bg-orb orb-1"></div>
+  <div class="glow-bg-orb orb-2"></div>
+  <div class="glow-bg-grid"></div>
+
+  <!-- Header Navigation -->
+  <header class="main-header">
+    <div class="container navbar">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">product<span>Power</span></span>
+      </div>
+      <nav class="nav-links">
+        <a href="#platform" class="active">Platform</a>
+        <a href="#compliance">Compliance</a>
+        <a href="#research">Research</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="#login" class="btn-text">Log In</a>
+        <button class="btn-primary" onclick="triggerFileUploader()">Upload Label</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section & Robot Simulator -->
+  <section class="hero-section">
+    <div class="container grid-2">
+      <div class="hero-content">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          NEXT-GEN OCR ENGINE
+        </div>
+        <h1 class="hero-title">AI-Powered Food <br><span class="gradient-text">Label Intelligence</span></h1>
+        <p class="hero-description">
+          Automate food safety auditing, risk assessment, and regulatory compliance with lightning-fast AI extraction. Precision data at the speed of light.
+        </p>
+        <div class="hero-actions">
+  <input type="file" id="file-uploader" accept="image/*,application/pdf" style="display: none;" onchange="handleFileSelected(event)">
+</div>
+        
+        <!-- Live Robot Control Tip -->
+        <div class="robot-instruction-card">
+          <div class="instruction-icon">🤖</div>
+          <div class="instruction-text">
+            <h4>Interactive Simulator</h4>
+            <p>Upload a custom food label image or select a demo item from the table to watch the robot scan and check ingredients in real-time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Robotic Arm Scanner Simulator Widget -->
+      <div class="simulator-card glass-panel">
+        <div class="simulator-header">
+          <div class="window-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="simulator-title">ROBOTIC COMPLIANCE ASSIDER v1.0</div>
+          <div class="status-indicator">
+            <span class="status-pulse pulse-green" id="status-pulse-indicator"></span>
+            <span class="status-text" id="robot-status-text">SYSTEM READY</span>
+          </div>
+        </div>
+
+        <div class="simulator-viewport">
+          <!-- The Robotic Arm SVG -->
+          <svg id="robot-svg" viewBox="0 0 500 450" width="100%" height="100%">
+            <!-- Grid Lines Background -->
+            <defs>
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              </pattern>
+              <linearGradient id="laser-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(0, 243, 255, 0)"/>
+                <stop offset="50%" stop-color="rgba(0, 243, 255, 0.8)"/>
+                <stop offset="100%" stop-color="rgba(0, 243, 255, 0)"/>
+              </linearGradient>
+              <linearGradient id="arm-metal" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#1e293b"/>
+                <stop offset="50%" stop-color="#475569"/>
+                <stop offset="100%" stop-color="#0f172a"/>
+              </linearGradient>
+              <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+
+            <rect width="100%" height="100%" fill="url(#grid)" />
+
+            <!-- Scanner Bed Zone -->
+            <g id="scanner-zone">
+              <!-- Scanner Base -->
+              <rect x="50" y="380" width="110" height="15" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1" />
+              <!-- Glass plate -->
+              <rect x="55" y="376" width="100" height="4" rx="2" fill="rgba(0, 243, 255, 0.2)" stroke="#00f3ff" stroke-width="1" />
+              <!-- Hologram light beam (will glow when scanning) -->
+              <polygon id="scanner-light-beam" points="55,376 155,376 175,220 35,220" fill="rgba(0, 243, 255, 0.05)" style="opacity: 0; transition: opacity 0.3s;"></polygon>
+              <!-- Scanner laser sweep line -->
+              <line id="scanner-laser" x1="55" y1="376" x2="155" y2="376" stroke="#00f3ff" stroke-width="2" filter="url(#neon-glow)" style="opacity: 0;" />
+            </g>
+
+            <!-- Conveyor Table / Work Surface -->
+            <g id="table-zone">
+              <!-- Metal support -->
+              <line x1="20" y1="410" x2="480" y2="410" stroke="#334155" stroke-width="4" />
+              <rect x="180" y="395" width="300" height="15" rx="3" fill="#1e293b" stroke="#475569" stroke-width="1" />
+              <!-- Table Legs -->
+              <line x1="80" y1="410" x2="80" y2="450" stroke="#334155" stroke-width="3" />
+              <line x1="220" y1="410" x2="220" y2="450" stroke="#334155" stroke-width="3" />
+              <line x1="420" y1="410" x2="420" y2="450" stroke="#334155" stroke-width="3" />
+            </g>
+
+            <!-- Items on the table (Clickable targets) -->
+            <!-- Item 1: Juice Bottle (Orange/Purple label) -->
+            <g id="item-0" class="food-item" transform="translate(230, 345)" cursor="pointer" onclick="selectAndScanItem(0)">
+              <!-- Bottle Body -->
+              <path d="M5,15 C5,5 25,5 25,15 L25,45 C25,48 22,50 15,50 C8,50 5,48 5,45 Z" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="1.5" />
+              <rect x="7" y="22" width="16" height="20" rx="1" fill="#a855f7" opacity="0.8" />
+              <rect x="11" y="2" width="8" height="5" fill="#f43f5e" />
+              <!-- Label nutrition bar visual -->
+              <line x1="10" y1="26" x2="20" y2="26" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="10" y1="30" x2="16" y2="30" stroke="#00f3ff" stroke-width="1.5" />
+              <line x1="10" y1="34" x2="18" y2="34" stroke="#e11d48" stroke-width="1.5" />
+              <circle cx="15" cy="14" r="5" fill="#f97316" />
+              <title>Super-Juice Bottle (FSSAI Verification)</title>
+            </g>
+
+            <!-- Item 2: Energy Bar (Chocolate/Gold label) -->
+            <g id="item-1" class="food-item" transform="translate(300, 365)" cursor="pointer" onclick="selectAndScanItem(1)">
+              <!-- Wrapper shape -->
+              <rect x="0" y="5" width="40" height="25" rx="3" fill="#b45309" stroke="#f59e0b" stroke-width="1.5" />
+              <!-- Jagged torn edges -->
+              <path d="M 0 5 L 3 10 L 0 15 L 3 20 L 0 25 L 3 30" fill="none" stroke="#f59e0b" stroke-width="1" />
+              <path d="M 40 5 L 37 10 L 40 15 L 37 20 L 40 25 L 37 30" fill="none" stroke="#f59e0b" stroke-width="1" />
+              <!-- Nutritional text mock lines -->
+              <line x1="10" y1="12" x2="30" y2="12" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="10" y1="16" x2="26" y2="16" stroke="#e11d48" stroke-width="1.5" />
+              <line x1="10" y1="20" x2="22" y2="20" stroke="#22c55e" stroke-width="1.5" />
+              <title>NutriMax Protein Bar (Risk Assessment)</title>
+            </g>
+
+            <!-- Item 3: Soda Can (Cyan design) -->
+            <g id="item-2" class="food-item" transform="translate(370, 350)" cursor="pointer" onclick="selectAndScanItem(2)">
+              <!-- Can cylinder -->
+              <rect x="2" y="2" width="24" height="45" rx="3" fill="#0f172a" stroke="#00f3ff" stroke-width="2" />
+              <line x1="2" y1="10" x2="26" y2="10" stroke="#00f3ff" stroke-width="1" />
+              <line x1="2" y1="40" x2="26" y2="40" stroke="#00f3ff" stroke-width="1" />
+              <!-- Diagonal design slash -->
+              <path d="M 4 35 L 24 15" stroke="#ec4899" stroke-width="2" />
+              <line x1="8" y1="20" x2="16" y2="20" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="8" y1="25" x2="20" y2="25" stroke="#ec4899" stroke-width="1.5" />
+              <title>FizzUp Energy Soda (Additive Flagged)</title>
+            </g>
+
+            <!-- Item 4: Cereal Box (Yellow/Orange design) -->
+            <g id="item-3" class="food-item" transform="translate(430, 335)" cursor="pointer" onclick="selectAndScanItem(3)">
+              <!-- Box rectangle -->
+              <rect x="0" y="0" width="30" height="60" rx="2" fill="#d97706" stroke="#fbbf24" stroke-width="2" />
+              <rect x="5" y="10" width="20" height="40" fill="rgba(251, 191, 36, 0.15)" />
+              <circle cx="15" cy="22" r="6" fill="#ef4444" />
+              <line x1="8" y1="38" x2="22" y2="38" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="8" y1="42" x2="18" y2="42" stroke="#22c55e" stroke-width="1.5" />
+              <title>OatyFlakes Healthy Cereal (Allergen Scan)</title>
+            </g>
+
+            <!-- Custom Uploaded Item (Hidden by default, shown when user uploads a file) -->
+            <g id="item-custom" class="food-item" transform="translate(485, 335)" style="display: none;">
+              <!-- Rectangular card shape resembling a label document -->
+              <rect x="0" y="0" width="32" height="60" rx="3" fill="#0f172a" stroke="#00f3ff" stroke-width="2" filter="url(#neon-glow)" />
+              <line x1="6" y1="12" x2="26" y2="12" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="6" y1="20" x2="20" y2="20" stroke="#00f3ff" stroke-width="1.5" />
+              <line x1="6" y1="28" x2="24" y2="28" stroke="#00f3ff" stroke-width="1.5" />
+              <!-- Small picture icon representation -->
+              <rect x="6" y="36" width="20" height="15" rx="1" fill="rgba(0, 243, 255, 0.15)" stroke="#00f3ff" stroke-width="1" />
+              <title>Custom Uploaded Food Label</title>
+            </g>
+
+            <!-- Robotic Arm Group -->
+            <g id="robotic-arm">
+              <!-- Arm Base Anchor -->
+              <g id="robot-base" transform="translate(100, 410)">
+                <path d="M-30,0 L30,0 L20,-20 L-20,-20 Z" fill="#1e293b" stroke="#475569" stroke-width="2" />
+                <circle cx="0" cy="-20" r="14" fill="#0f172a" stroke="#64748b" stroke-width="2" />
+                <circle cx="0" cy="-20" r="5" fill="#00f3ff" filter="url(#neon-glow)" />
+              </g>
+
+              <!-- Link 1 (Lower Arm) -->
+              <line id="arm-link-1" x1="100" y1="390" x2="100" y2="240" stroke="url(#arm-metal)" stroke-width="12" stroke-linecap="round" />
+              <!-- Link 1 Internal detailing -->
+              <line id="arm-link-1-detail" x1="100" y1="380" x2="100" y2="250" stroke="#00f3ff" stroke-width="2" opacity="0.6" />
+
+              <!-- Elbow Joint -->
+              <g id="robot-elbow" transform="translate(100, 240)">
+                <circle cx="0" cy="0" r="10" fill="#1e293b" stroke="#475569" stroke-width="2" />
+                <circle cx="0" cy="0" r="4" fill="#00f3ff" />
+              </g>
+
+              <!-- Link 2 (Upper Arm) -->
+              <line id="arm-link-2" x1="100" y1="240" x2="100" y2="120" stroke="url(#arm-metal)" stroke-width="8" stroke-linecap="round" />
+              <!-- Link 2 Internal detailing -->
+              <line id="arm-link-2-detail" x1="100" y1="230" x2="100" y2="130" stroke="#00f3ff" stroke-width="1" opacity="0.6" />
+
+              <!-- Wrist Joint -->
+              <g id="robot-wrist" transform="translate(100, 120)">
+                <circle cx="0" cy="0" r="8" fill="#1e293b" stroke="#475569" stroke-width="1.5" />
+              </g>
+
+              <!-- Gripper Claw Assembly -->
+              <g id="robot-gripper" transform="translate(100, 120)">
+                <!-- Gripper Bracket -->
+                <path d="M-12,0 L12,0 L8,12 L-8,12 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+                <!-- Left Claw Finger -->
+                <path id="claw-left" d="M-8,12 C-8,22 -2,28 -2,32" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round" />
+                <!-- Right Claw Finger -->
+                <path id="claw-right" d="M8,12 C8,22 2,28 2,32" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round" />
+              </g>
+            </g>
+          </svg>
+
+          <!-- Scanner Badge HUD -->
+          <div class="scanner-hud-overlay" id="scanning-hud">
+            <div class="hud-box">
+              <span class="hud-scanner-text" id="hud-text">STANDBY</span>
+              <div class="hud-progress-bar">
+                <div class="hud-progress-fill" id="hud-progress-bar-fill"></div>
+              </div>
+            </div>
+            <div class="hud-indicator verified" id="hud-verification" style="opacity: 0;">
+              <span class="indicator-icon">✔</span> FSSAI VERIFIED
+            </div>
+          </div>
+        </div>
+
+        <!-- Live OCR Scanning Output Terminal -->
+        <div class="ocr-terminal">
+          <div class="terminal-bar">
+            <span>Terminal OCR Readout</span>
+            <span class="terminal-fps">60 FPS // LATENCY: 3.4ms</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line placeholder-line" id="terminal-placeholder">
+              [SYSTEM IDLE] Choose a food item from the conveyor table or upload a label to analyze...
+            </div>
+            <div class="terminal-line" id="t-line-1"></div>
+            <div class="terminal-line" id="t-line-2"></div>
+            <div class="terminal-line" id="t-line-3"></div>
+            <div class="terminal-line" id="t-line-4"></div>
+            <div class="terminal-line" id="t-line-5"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dynamic Scan Report Section -->
+  <section class="scan-report-section" id="report-section">
+    <div class="container">
+      <div class="section-header-centered">
+        <h2 class="section-title">Scan Analysis Report</h2>
+        <p class="section-subtitle">Real-time nutritional audit and database verification of extracted labels.</p>
+      </div>
+
+      <div class="report-dashboard glass-panel">
+        <div class="report-meta">
+          <div class="meta-item">
+            <span class="meta-label">Selected Item:</span>
+            <span class="meta-val" id="report-item-name">- None -</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">OCR Confidence:</span>
+            <span class="meta-val highlight-cyan" id="report-item-confidence">0.0%</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">FSSAI License:</span>
+            <span class="meta-val" id="report-item-license">-</span>
+          </div>
+        </div>
+
+        <div class="report-details-grid">
+          <!-- Left: Extracted Ingredients list -->
+          <div class="report-card">
+            <h3>Extracted Ingredients text</h3>
+            <div class="ingredients-list" id="report-ingredients-list">
+              <span class="placeholder-text">Please scan a food item to extract its ingredient list.</span>
+            </div>
+          </div>
+
+          <!-- Middle: Risk Matrix Checks -->
+          <div class="report-card">
+            <h3>Compliance & Safety Check</h3>
+            <ul class="check-list" id="report-compliance-checks">
+              <li class="disabled"><span>-</span> Audit scan not started</li>
+              <li class="disabled"><span>-</span> Ingredients allergen screening</li>
+              <li class="disabled"><span>-</span> Regulatory compliance verification</li>
+            </ul>
+          </div>
+
+          <!-- Right: Action Summary Card -->
+          <div class="report-summary-card">
+            <div class="summary-score-wheel">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="score-circle" class="circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.35" class="percentage" id="score-value">--</text>
+              </svg>
+            </div>
+            <div class="summary-details">
+              <h4>Safety Index</h4>
+              <p id="safety-rating-text">Verify ingredients safety index dynamically based on FSSAI, FDA, and WHO compliance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Intelligent Core Section -->
+  <section class="features-section" id="platform">
+    <div class="container">
+      <div class="section-header-centered">
+        <h2 class="section-title">The Intelligent Core</h2>
+        <p class="section-subtitle">Unrivaled precision powered by neural extraction engines.</p>
+      </div>
+
+      <div class="grid-4" id="features-grid">
+        <!-- Feature 1: Neural OCR -->
+        <div class="feature-card glass-panel" id="feature-ocr">
+          <div class="feature-icon ocr-icon">🔍</div>
+          <h3>Neural OCR</h3>
+          <p>Extract text from any packaging with sub-millimeter precision across 140 languages.</p>
+          <div class="feature-status-light" id="status-ocr-val">Active</div>
+        </div>
+
+        <!-- Feature 2: Risk Matrix -->
+        <div class="feature-card glass-panel" id="feature-risk">
+          <div class="feature-icon risk-icon">📊</div>
+          <h3>Risk Matrix</h3>
+          <p>Cross-reference ingredients against WHO, EU, and FDA databases automatically.</p>
+          <div class="feature-status-light" id="status-risk-val">Monitoring</div>
+        </div>
+
+        <!-- Feature 3: FSSAI Bridge -->
+        <div class="feature-card glass-panel" id="feature-fssai">
+          <div class="feature-icon fssai-icon">🛡</div>
+          <h3>FSSAI Bridge</h3>
+          <p>Real-time verification of license numbers and compliance status in seconds.</p>
+          <div class="feature-status-light" id="status-fssai-val">Ready</div>
+        </div>
+
+        <!-- Feature 4: Additive Checker -->
+        <div class="feature-card glass-panel" id="feature-additive">
+          <div class="feature-icon additive-icon">🧪</div>
+          <h3>Additive Checker</h3>
+          <p>Instant detection of hidden chemicals, E-codes, and proprietary flavor compounds.</p>
+          <div class="feature-status-light" id="status-additive-val">Optimal</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats ribbon -->
+  <section class="stats-section">
+    <div class="container grid-3">
+      <div class="stat-box">
+        <div class="stat-value" id="stat-labels">500M+</div>
+        <div class="stat-label">Labels Scanned</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="stat-accuracy">99.9%</div>
+        <div class="stat-label">OCR Accuracy</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="stat-countries">200+</div>
+        <div class="stat-label">Countries Supported</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA section -->
+  <section class="cta-section" id="get-started">
+    <div class="container glass-panel cta-box">
+      <h2>Ready to automate your<br>label intelligence?</h2>
+      <p>Join the world's leading food producers and regulators in securing the global food chain with AI.</p>
+      <div class="cta-actions">
+  </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">product<span>Power</span></span>
+        </div>
+        <p class="footer-copyright">
+          &copy; 2026 productPower AI. <br>
+          Precision Nutrition Intelligence. <br>
+          All rights reserved.
+        </p>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Platform</h4>
+        <a href="#platform">OCR Engine</a>
+        <a href="#docs">API Docs</a>
+        <a href="#integrations">Integrations</a>
+      </div>
+
+      <div class="footer-links">
+        <h4>Resources</h4>
+        <a href="#fssai">FSSAI Guidelines</a>
+        <a href="#papers">Research Papers</a>
+        <a href="#reports">Safety Reports</a>
+      </div>
+
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms of Service</a>
+        <a href="#cookies">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
